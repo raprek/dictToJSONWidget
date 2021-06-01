@@ -85,18 +85,17 @@ class DictToSchema:
             if isinstance(non_decoded, list):
                 template_temp = cls.get_template(list)
                 cls.update_or_append(current_dict, template_temp)
+                to_ad_el = current_dict if isinstance(current_dict, dict) else current_dict[-1]
 
                 if len(non_decoded) == 1:
-                    next_step_data = current_dict["items"] if isinstance(current_dict, dict) else current_dict[-1]
-                    make_down_step(non_decoded[0], next_step_data)
+                    make_down_step(non_decoded[0], to_ad_el["items"])
 
                 elif len(non_decoded) > 1:
-                    cls.update_or_append(current_dict["items"], {"anyOf": []})
-                    to_ad_el = current_dict["items"] if isinstance(current_dict, dict) else current_dict[-1]
+                    cls.update_or_append(to_ad_el["items"], {"anyOf": []})
+                    to_ad_el = current_dict if isinstance(current_dict, dict) else current_dict[-1]
                     for el in non_decoded:
-                        make_down_step(el, to_ad_el["anyOf"])
-                else:
-                    current_dict.update(template_temp)
+                        make_down_step(el, to_ad_el["items"]["anyOf"])
+
 
             if isinstance(non_decoded, (str, bool, int, type(None))) \
                     or (isinstance(non_decoded, type) and issubclass(non_decoded, (str, bool, int))):

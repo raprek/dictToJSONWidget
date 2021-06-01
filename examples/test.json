@@ -19,6 +19,42 @@
                         "type": "boolean",
                         "title": "",
                         "format": "checkbox"
+                    },
+                    {
+                        "type": "array",
+                        "title": "",
+                        "items": {
+                            "type": "object",
+                            "title": "",
+                            "properties": {
+                                "key_1_1": {
+                                    "type": "array",
+                                    "title": "",
+                                    "items": {
+                                        "anyOf": [
+                                            {
+                                                "type": "string",
+                                                "title": ""
+                                            },
+                                            {
+                                                "type": "null",
+                                                "title": ""
+                                            },
+                                            {
+                                                "type": "boolean",
+                                                "title": "",
+                                                "format": "checkbox"
+                                            },
+                                            {
+                                                "type": "array",
+                                                "title": "",
+                                                "items": {}
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
                     }
                 ]
             }
