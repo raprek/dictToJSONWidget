@@ -1,6 +1,9 @@
 # dictToJSONWidget
 The util helping to avoid annoying handwork of data transformation into json scheme for JSONEditorWidget
-
+## INSTALL
+```
+pip install git+https://github.com/raprek/dictToJSONWidget.git
+```
 ## Possible type specification
 For primitive types you can use both instances of classes as 
 <b>"any-text", 12, True/False, None</b> and python class notations as
@@ -14,7 +17,7 @@ an array of same type just use <b>{ "some_key" : [""] or [str] } </b> syntax. (C
 ## Usage / Examples:
 
 ```
-#from src.main import DictToSchema
+from dictToJSONWidget import DictToSchema
 
 test_json = {
         "key_1": [str, None, True],
@@ -24,6 +27,9 @@ test_json = {
     }
     
 json_ = DictToSchema.dict_to_schema(test_json)
+
+# convert and save
+# DictToSchema.dict_to_schema_and_save(json_, 'json_out.json')
 
 ```
 

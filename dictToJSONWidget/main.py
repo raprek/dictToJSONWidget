@@ -106,4 +106,10 @@ class DictToSchema:
 
         return final_schema
 
+    @classmethod
+    def dict_to_schema_and_save(cls, in_dict: dict, path: str):
+        json_ = cls.dict_to_schema(in_dict)
+        with open(path, "w") as file:
+            json.dump(json_, file, indent=4)
+
 
