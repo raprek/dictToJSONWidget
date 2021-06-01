@@ -33,8 +33,11 @@ class DictToSchema:
     }
 
     @classmethod
-    def get_template(cls, python_type) -> dict:
+    def get_template(cls, python_type: Union[type]) -> dict:
         """Helps to get template in convenient and safe way"""
+        if not isinstance(python_type, type):
+            python_type = type(python_type)
+
         if python_type is dict:
             return copy.deepcopy(cls.dict_template.copy())
 
@@ -95,8 +98,9 @@ class DictToSchema:
                 else:
                     current_dict.update(template_temp)
 
-            if isinstance(non_decoded, (str, bool, int, type(None))):
-                template_temp = cls.get_template(type(non_decoded))
+            if isinstance(non_decoded, (str, bool, int, type(None))) \
+                    or (isinstance(non_decoded, type) and issubclass(non_decoded, (str, bool, int))):
+                template_temp = cls.get_template(non_decoded)
                 cls.update_or_append(current_dict, template_temp)
 
         make_down_step(in_dict, final_schema)

@@ -1,1 +1,37 @@
-{'type': 'object', 'title': '', 'properties': {'test_of_combine': {'type': 'array', 'title': '', 'items': {'anyOf': [{'type': 'object', 'title': '', 'properties': {'test_el_1': {'type': 'array', 'title': '', 'items': {'anyOf': [{'type': 'string', 'title': ''}, {'type': 'null', 'title': ''}, {'type': 'number', 'title': ''}]}}}}, {'type': 'object', 'title': '', 'properties': {'test_el_2': {'type': 'array', 'title': '', 'items': {'type': 'object', 'title': '', 'properties': {'test_el_5': {'type': 'array', 'title': '', 'items': {'type': 'string', 'title': ''}}, 'test_rl_3': {'type': 'null', 'title': ''}}}}}}]}}, 'just_test': {'type': 'array', 'title': '', 'items': {'type': 'string', 'title': ''}}}}
+{
+    "type": "object",
+    "title": "",
+    "properties": {
+        "key_1": {
+            "type": "array",
+            "title": "",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "title": ""
+                    },
+                    {
+                        "type": "null",
+                        "title": ""
+                    },
+                    {
+                        "type": "boolean",
+                        "title": "",
+                        "format": "checkbox"
+                    }
+                ]
+            }
+        },
+        "key_2": {
+            "type": "object",
+            "title": "",
+            "properties": {
+                "key_2_2": {
+                    "type": "string",
+                    "title": ""
+                }
+            }
+        }
+    }
+}

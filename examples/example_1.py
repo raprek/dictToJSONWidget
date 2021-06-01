@@ -1,4 +1,5 @@
 import sys
+import json
 sys.path.append("../")
 
 from src.main import DictToSchema
@@ -29,5 +30,5 @@ if __name__ == "__main__":
     json_ = DictToSchema.dict_to_schema(test_json)
     print(DictToSchema.dict_to_schema(test_json))
     with open("test.json", "w") as file:
-        file.write(str(json_))
+        json.dump(json_, file, indent=4, sort_keys=True)
 
