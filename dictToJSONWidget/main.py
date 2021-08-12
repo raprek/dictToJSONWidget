@@ -33,6 +33,57 @@ class DictToSchema:
     }
 
     @classmethod
+    def post_cleaner(cls, input_):
+        cleaned_obj = input_.copy()
+
+        def go_deep(input_obj):
+            if isinstance(input_obj, dict) and input_obj.get('type') == 'array' and input_obj.get('items', {}).get('anyOf'):
+                cleaned_any = cls.clean_up_list(input_obj['items'].get('anyOf', input_obj['items']))
+                input_obj['items']['anyOf'] = cleaned_any
+
+                if len(cleaned_any) == 1:
+                    input_obj['items'] = cleaned_any[0]
+
+                else:
+                    for el in input_obj['items']['anyOf']:
+                        if el['type'] == 'object':
+                            go_deep(el)
+
+            elif isinstance(input_obj, dict) and input_obj.get('type') == 'object':
+                go_deep(input_obj.get('properties'))
+
+            elif isinstance(input_obj, dict):
+                for value in input_obj.values():
+                    go_deep(value)
+
+        go_deep(cleaned_obj)
+        return cleaned_obj
+
+    @staticmethod
+    def clean_up_list(in_list: List):
+
+        if not in_list:
+            return []
+
+        clear_pull = []
+
+        def go_deep(in_list_local):
+            nonlocal clear_pull
+            current_list = [in_list_local.pop(0)]
+            for el in in_list_local:
+                if el != current_list[0]:
+                    current_list.append(el)
+
+            if len(current_list) > 1:
+                clear_pull.append(current_list.pop(0))
+                go_deep(current_list)
+            else:
+                clear_pull = clear_pull + current_list
+
+        go_deep(in_list.copy())
+        return clear_pull
+
+    @classmethod
     def get_template(cls, python_type: Union[type]) -> dict:
         """Helps to get template in convenient and safe way"""
         if not isinstance(python_type, type):
@@ -67,8 +118,27 @@ class DictToSchema:
             input_el.append(to_add)
 
     @classmethod
-    def dict_to_schema(cls, in_dict: dict) -> dict:
-        """Converts python dict to schema of django-json-widget"""
+    def dict_to_schema(cls, in_dict: dict, use_post_cleaner: bool = True) -> dict:
+        """
+        Converts python dict to schema of django-json-widget
+        :param use_post_cleaner: Apply or not cleaner for to avoid repetition in  anyOf case
+            Example:
+                {...
+                    'items': {'anyOf':
+                     [
+                     {'type': 'string', 'title': ''},
+                     {'type': 'string', 'title': ''}
+                     ]
+                 ...}
+                automatically converts to:
+                {...
+                    'items':
+                     {'type': 'string', 'title': ''},
+                 }
+
+        :param in_dict: data to convert
+        :
+        """
         final_schema = {}
 
         def make_down_step(non_decoded, current_dict) -> None:
@@ -96,13 +166,15 @@ class DictToSchema:
                     for el in non_decoded:
                         make_down_step(el, to_ad_el["items"]["anyOf"])
 
-
             if isinstance(non_decoded, (str, bool, int, type(None))) \
                     or (isinstance(non_decoded, type) and issubclass(non_decoded, (str, bool, int))):
                 template_temp = cls.get_template(non_decoded)
                 cls.update_or_append(current_dict, template_temp)
 
         make_down_step(in_dict, final_schema)
+
+        if use_post_cleaner:
+            final_schema = cls.post_cleaner(final_schema)
 
         return final_schema
 
@@ -111,5 +183,3 @@ class DictToSchema:
         json_ = cls.dict_to_schema(in_dict)
         with open(path, "w") as file:
             json.dump(json_, file, indent=4)
-
-

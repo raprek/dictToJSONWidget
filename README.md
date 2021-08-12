@@ -10,9 +10,37 @@ For primitive types you can use both instances of classes as
 <b>str, int, bool, None</b>.
 
 ### Note
-Be cautious with case of using array/list in pseudo schema(input). Every element in
+By default, repetition cleaner is activated (use_post_cleaner). That means
+every repetition in array elements notation ("anyOf") is cleaned automatically. 
+Example:
+```
+{
+    ...
+    'items': {
+        'anyOf':
+         [
+             {'type': 'string', 'title': ''},
+             {'type': 'string', 'title': ''}
+         ]
+    ...
+ }
+```
+
+automatically converts to:
+```
+{
+    'items': {
+        'type': 'string', 'title': ''
+     },
+ }
+
+```
+
+
+Be cautious with case of using array/list in pseudo schema(input) with use_post_cleaner=False. Every element in
 array(list) pseudo schema is considered as different types in final schema. Thus, if you have
-an array of same type just use <b>{ "some_key" : [""] or [str] } </b> syntax. (Check examples)
+an array of same type just use <b>{ "some_key" : [""] or [str] } </b> syntax OR JUST USE DEFAULT SETTINGS.
+(Check examples)
 
 ## Usage / Examples:
 

@@ -48,8 +48,16 @@
                                             "type": "array",
                                             "title": "",
                                             "items": {
-                                                "type": "string",
-                                                "title": ""
+                                                "anyOf": [
+                                                    {
+                                                        "type": "string",
+                                                        "title": ""
+                                                    },
+                                                    {
+                                                        "type": "number",
+                                                        "title": ""
+                                                    }
+                                                ]
                                             }
                                         },
                                         "test_rl_3": {

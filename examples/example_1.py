@@ -17,7 +17,7 @@ if __name__ == "__main__":
             {
                 "test_el_2": [
                     {
-                        "test_el_5": ["5"],
+                        "test_el_5": ["5", 'text', 'number', 16],
                         "test_rl_3": None
                     }
                 ]
